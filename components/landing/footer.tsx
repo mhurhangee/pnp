@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { Github, Globe, Mail } from "lucide-react"
-import { PixelatedEmoji } from "@/components/pixelated-emoji"
+import { PixelatedEmoji } from "@/components/design/pixelated-emoji"
 
 export default function Footer() {
   return (
-    <footer className="w-full height-2rem bg-background flex items-center justify-center">
+    <footer className="w-full height-2rem bg-background flex items-center justify-center pt-4 text-muted-foreground">
         <span>Made with <PixelatedEmoji emoji="💚" size={24} /> by m.hurhangee</span>
         <div className="flex items-center gap-3 pl-2">
           <Link

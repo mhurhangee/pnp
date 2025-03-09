@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Footer from "@/components/footer";
+import { LoadingProvider } from "@/components/loading/loading-context";
+import { CrtEffects } from "@/components/design/crt-effects";
+import { CentredLayout } from "@/components/design/centred-layout";
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+const title = isDevelopment ? "(dev) Potions and Prompts" : "Potions and Prompts";
 
 export const metadata: Metadata = {
-  title: "Potions and Prompts",
+  title: title,
   description: "An AI-powered text-based roleplaying game",
   icons: {
     icon: [
@@ -21,22 +26,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang="en">
       <body
         className={`dark antialiased`}
       >
-        <div className="crt-effects">
-          <div className="crt-pixel" />
-          <div className="crt-scanline" />
-          <div className="crt-vignette" />
-        </div>
-        <main>
-        <div className="flex h-[calc(100vh-2rem)] items-center justify-center">
-          {children}
-          </div>
-        </main>
-        <Footer />
+        <LoadingProvider>
+          <CrtEffects />
+          <main>
+            <CentredLayout>
+              {children}
+            </CentredLayout>
+          </main>
+        </LoadingProvider>
       </body>
+
     </html>
+
   );
 }
