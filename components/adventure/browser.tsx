@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Filter, X } from "lucide-react"
+import { Search, X } from "lucide-react"
 import { motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -79,14 +79,14 @@ export function AdventureBrowser() {
   const hiddenFiltersCount = activeFilters.length - visibleFiltersCount
 
   return (
-    <Card className="mx-auto max-w-2xl w-full bg-slate-950 my-8">
+    <Card className="mx-auto max-w-3xl w-full bg-slate-950 my-8">
       <CardHeader className="pb-2">
         <CardTitle>
           <PixelatedEmoji emoji="🗺️" className="pr-2" />
           Adventures
           <PixelatedEmoji emoji="🏕️" className="pl-2" />
         </CardTitle>
-        <CardDescription className="text-center">Choose an adventure to begin your journey.</CardDescription>
+        <CardDescription className="text-center text-lg">Choose an adventure to begin your journey.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -129,10 +129,10 @@ export function AdventureBrowser() {
                       <Label htmlFor="difficulty">Difficulty</Label>
                       <Select value={selectedDifficulty || "all"} onValueChange={handleDifficultyChange}>
                         <SelectTrigger id="difficulty">
-                          <SelectValue placeholder="Any difficulty" />
+                          <SelectValue placeholder="ALL" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">Any difficulty</SelectItem>
+                          <SelectItem value="all">ALL</SelectItem>
                           {allDifficulties.map((difficulty) => (
                             <SelectItem key={difficulty} value={difficulty}>
                               {difficulty}
@@ -144,7 +144,7 @@ export function AdventureBrowser() {
 
                     <div className="space-y-2">
                       <Label>Genres</Label>
-                      <div className="max-h-32 overflow-auto space-y-2">
+                      <ScrollArea>
                         {allGenres.map((genre) => (
                           <div key={genre} className="flex items-center space-x-2">
                             <Checkbox
@@ -157,7 +157,7 @@ export function AdventureBrowser() {
                             </Label>
                           </div>
                         ))}
-                      </div>
+                      </ScrollArea>
                     </div>
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export function AdventureBrowser() {
           {/* Active filters display with truncation */}
           <div className="flex items-center gap-1 h-6">
             {!hasActiveFilters ? (
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-md">
                 All Adventures
               </Badge>
             ) : (
@@ -210,7 +210,7 @@ export function AdventureBrowser() {
                         </div>
                         <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto">
                           {activeFilters.map((filter, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
+                            <Badge key={index} variant="secondary" className="text-md">
                               {filter}
                               <button
                                 className="ml-1 hover:text-primary"
@@ -250,18 +250,18 @@ export function AdventureBrowser() {
                   <motion.div key={adventure.id} variants={item}>
                     <Card className="h-full flex flex-col">
                       <CardHeader>
-                        <CardTitle className="text-lg">
+                        <CardTitle className="text-xl">
                           <PixelatedEmoji emoji={adventure.emoji} className="pr-2" />
                           {adventure.title}
                           <span className="hidden lg:inline-block"><PixelatedEmoji emoji={adventure.emoji} className="pl-2" /></span>
                         </CardTitle>
-                        <CardDescription>{adventure.setting}</CardDescription>
+                        <CardDescription className="text-md">{adventure.setting}</CardDescription>
                       </CardHeader>
                       <CardContent className="flex-grow">
-                        <p className="text-sm text-muted-foreground">{adventure.description}</p>
+                        <p className="text-md text-muted-foreground">{adventure.description}</p>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {adventure.genre.map((genre) => (
-                            <Badge key={genre} variant="secondary" className="text-xs">
+                            <Badge key={genre} variant="secondary" className="text-md">
                               {genre}
                             </Badge>
                           ))}
@@ -270,7 +270,7 @@ export function AdventureBrowser() {
                       <CardFooter className="pt-0">
                         <div className="flex w-full items-center justify-between">
                           <Badge variant="outline">{adventure.difficulty}</Badge>
-                          <Link href={`/view`}>
+                          <Link href={`/adventure-confirm`}>
                             <Button size="sm" onClick={() => setSelectedAdventure(adventure)}>
                               Begin
                             </Button>
