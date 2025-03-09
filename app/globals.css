@@ -142,8 +142,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-
-  --shadow: 4px 4px 0px 0px #94a3b8;
+  --shadow: 4px 4px 0px 0px #cbd5e1;
 }
 
 @layer base {
@@ -153,6 +152,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: "VT323", monospace;
+    text-transform: uppercase;
   }
 }
 
@@ -229,4 +229,6 @@
     );
   border-radius: 20px;
   box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.3);
+
+
 }

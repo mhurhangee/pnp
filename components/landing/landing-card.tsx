@@ -7,7 +7,7 @@ import Link from "next/link"
 
 export function LandingCard() {
     return (
-        <Card className="mx-auto max-w-md w-full bg-slate-950">
+        <Card className="mx-auto max-w-lg w-full bg-slate-950">
             <CardHeader>
                 <CardTitle><PixelatedEmoji emoji="⚗️" className="mx-auto mb-2" />Potions & Prompts<PixelatedEmoji emoji="📜" className="pl-2" /></CardTitle>
             </CardHeader>
@@ -21,7 +21,7 @@ export function LandingCard() {
             </CardContent>
             <CardFooter className="flex justify-center">
                 <Button asChild size="lg" variant="red">
-                    <Link href="/dashboard" >Begin your adventure</Link>
+                    <Link href="/adventure" >Begin your adventure</Link>
                 </Button>
             </CardFooter>
         </Card>

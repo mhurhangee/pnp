@@ -1,4 +1,4 @@
-export function CrtEffects() {
+export function CRTEffects() {
     return (
         <div className="crt-effects">
             <div className="crt-pixel" />

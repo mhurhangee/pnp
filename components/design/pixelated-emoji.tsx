@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useState, useMemo } from "react"
-import { useLoadingContext } from "@/components/loading/loading-context"
+import { useLoadingContext } from "@/components/loading/context"
 
 interface PixelatedEmojiProps {
   emoji: string

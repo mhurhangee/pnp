@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { LoadingProvider } from "@/components/loading/loading-context";
-import { CrtEffects } from "@/components/design/crt-effects";
-import { CentredLayout } from "@/components/design/centred-layout";
+import { Providers } from "@/components/providers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const title = isDevelopment ? "(dev) Potions and Prompts" : "Potions and Prompts";
@@ -31,17 +29,10 @@ export default function RootLayout({
       <body
         className={`dark antialiased`}
       >
-        <LoadingProvider>
-          <CrtEffects />
-          <main>
-            <CentredLayout>
-              {children}
-            </CentredLayout>
-          </main>
-        </LoadingProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
-
     </html>
-
   );
 }
