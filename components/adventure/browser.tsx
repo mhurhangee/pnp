@@ -270,7 +270,7 @@ export function AdventureBrowser() {
                       <CardFooter className="pt-0">
                         <div className="flex w-full items-center justify-between">
                           <Badge variant="outline">{adventure.difficulty}</Badge>
-                          <Link href={`/adventure-confirm`}>
+                          <Link href={`/adventure/confirm`}>
                             <Button size="sm" onClick={() => setSelectedAdventure(adventure)}>
                               Begin
                             </Button>

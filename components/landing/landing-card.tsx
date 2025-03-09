@@ -21,7 +21,7 @@ export function LandingCard() {
             </CardContent>
             <CardFooter className="flex justify-center">
                 <Button asChild size="lg" variant="red">
-                    <Link href="/adventure-select" >Begin your adventure</Link>
+                    <Link href="/adventure/select" >Begin your adventure</Link>
                 </Button>
             </CardFooter>
         </Card>
