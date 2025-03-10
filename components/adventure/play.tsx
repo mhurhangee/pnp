@@ -7,6 +7,8 @@ import { Protagonist } from './protagonists';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { EnhancedStrippedDice } from '@/components/design/dice';
+import { PixelatedEmoji } from '@/components/design/pixelated-emoji';
+import { Quit } from './quit';
 
 export function Play({
     selectedAdventure,
@@ -36,8 +38,8 @@ export function Play({
     }
 
     const handleDiceRoll = (result: number) => {
-        
-        const updatedDiceResult = result 
+
+        const updatedDiceResult = result
 
         // Make API call
         fetch('/api/play', {
@@ -76,20 +78,13 @@ export function Play({
 
     return (
         <div className="max-w-3xl mx-auto p-4 min-h-[calc(100vh-100px)] flex flex-col">
-            <motion.h1
-                className="text-2xl font-bold mb-6 text-center pix-header"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                {selectedProtagonist.name}: {selectedAdventure.title}
-            </motion.h1>
+
             <div className="flex-grow flex flex-col justify-center">
+                <Quit />
                 {/* Loading Indicator */}
                 <AnimatePresence mode="wait">
+
                     {isLoading || diceRolling ? (
-
-
                         <motion.div
                             key="loading"
                             initial={{ opacity: 0 }}
@@ -118,6 +113,13 @@ export function Play({
                             <motion.div className="absolute top-0 right-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 left-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 right-0 w-4 h-4 bg-white"></motion.div>
+
+                            <h3 className="pix-header text-2xl text-center">{selectedProtagonist.name}: {selectedAdventure.title}</h3>
+                            <div className="flex items-center justify-center">
+                                <PixelatedEmoji
+                                    emoji={selectedProtagonist.emoji}
+                                />
+                            </div>
                             <p className="mb-8">{currentOutcome}</p>
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
@@ -147,7 +149,12 @@ export function Play({
                             <motion.div className="absolute bottom-0 left-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 right-0 w-4 h-4 bg-white"></motion.div>
 
-
+                            <h3 className="pix-header text-2xl text-center">Narrator of {selectedAdventure.title}</h3>
+                            <div className="flex items-center justify-center">
+                                <PixelatedEmoji
+                                    emoji={selectedAdventure.emoji}
+                                />
+                            </div>
                             <p className="mb-8">{currentNarrative}</p>
 
                             <motion.div
@@ -178,7 +185,7 @@ export function Play({
                             <motion.div className="absolute bottom-0 left-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 right-0 w-4 h-4 bg-white"></motion.div>
                             <p className="text-center mb-6">
-                                What will {selectedProtagonist.name} do next?
+                                What will {selectedProtagonist.name} do next in {selectedAdventure.title}?
                             </p>
 
                             <div className="space-y-4 mb-6">
@@ -203,7 +210,6 @@ export function Play({
                                     </motion.div>
                                 ))}
                             </div>
-
                         </motion.div>
                     )}
                 </AnimatePresence>

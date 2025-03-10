@@ -40,8 +40,6 @@ export function ConfirmAdventure({ selectedAdventure }: { selectedAdventure: Adv
         <p>
           <PixelatedEmoji emoji="📖" size={24} /> <span className="pix-header text-lg">Description</span><br /> {selectedAdventure.description}
         </p>
-
-
         <p>
           <PixelatedEmoji emoji="🌍" size={24} /> <span className="pix-header text-lg">Setting</span><br /> {selectedAdventure.setting}
         </p>
@@ -60,8 +58,7 @@ export function ConfirmAdventure({ selectedAdventure }: { selectedAdventure: Adv
         <p>
           <PixelatedEmoji emoji="💡" size={24} /> <span className="pix-header text-lg">Themes</span><br /> {selectedAdventure.suggestedThemes.join(', ')}.
         </p>
-
-
+        
         {/* Protagonist Carousel */}
 
         <Card className="bg-slate-950">

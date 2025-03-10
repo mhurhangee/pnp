@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, X } from "lucide-react"
 import { motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
@@ -21,10 +21,18 @@ import { PixelatedEmoji } from "../design/pixelated-emoji"
 import { cn } from "@/lib/utils"
 
 export function AdventureBrowser() {
-  const { setSelectedAdventure } = useAdventure()
+  const { setSelectedAdventure, setGameHistory, setSelectedProtagonist } = useAdventure()
+
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null)
+
+  // Reset selected adventure when component mounts
+  useEffect(() => {
+    setSelectedAdventure(null)
+    setGameHistory([])
+    setSelectedProtagonist(null)
+  }, [])
 
   // Get all unique genres across all stories
   const allGenres = Array.from(new Set(ADVENTURES.flatMap((adventure) => adventure.genre))).sort()
