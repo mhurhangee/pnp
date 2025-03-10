@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Adventure } from "./adventures"
 import { PixelatedEmoji } from "@/components/design/pixelated-emoji"
-import { Badge } from "@/components/ui/badge"
 import { PROTAGONISTS } from "@/components/adventure/protagonists"
 import { useAdventure } from "@/components/adventure/context"
+import { cn } from "@/lib/utils"
 
 export function ConfirmAdventure({ selectedAdventure }: { selectedAdventure: Adventure }) {
   // Get the list of protagonists for the selected adventure.
@@ -28,69 +28,74 @@ export function ConfirmAdventure({ selectedAdventure }: { selectedAdventure: Adv
   }
 
   return (
-    <Card className="max-w-3xl mx-auto mt-8 bg-slate-950 border-2">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center justify-center text-3xl font-bold">
+    <Card className={cn(`card-adventure`, `${selectedAdventure.color}`)} variant="corners">
+      <CardHeader>
+        <CardTitle className="pix-header">
           <PixelatedEmoji emoji={selectedAdventure.emoji} className="mr-3" />
           <span className="text-center">{selectedAdventure.title}</span>
-          <PixelatedEmoji emoji={selectedAdventure.emoji} className="ml-3 hidden lg:block" />
+          <span className="hidden lg:inline-block"><PixelatedEmoji emoji={selectedAdventure.emoji} className="pl-2" /></span>
         </CardTitle>
-        <CardDescription className="text-center">{selectedAdventure.description}</CardDescription>
-        <div className="flex justify-between items-center mt-1">
-          <div className="flex flex-wrap gap-1">
-            {selectedAdventure.genre.map((genre) => (
-              <Badge key={genre} variant="secondary">
-                {genre}
-              </Badge>
-            ))}
-          </div>
-          <Badge variant="outline">{selectedAdventure.difficulty}</Badge>
-        </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-muted-foreground">
-          <PixelatedEmoji emoji="🌍" size={24} className="mr-2" /> {selectedAdventure.setting}
+        <p>
+          <PixelatedEmoji emoji="📖" size={24} /> <span className="pix-header text-lg">Description</span><br /> {selectedAdventure.description}
         </p>
-        <p className="text-muted-foreground">
-          <PixelatedEmoji emoji="🎭" size={24} className="mr-2" /> {selectedAdventure.narratorPersonality}
+
+
+        <p>
+          <PixelatedEmoji emoji="🌍" size={24} /> <span className="pix-header text-lg">Setting</span><br /> {selectedAdventure.setting}
         </p>
-        <p className="text-muted-foreground">
-          <PixelatedEmoji emoji="🎨" size={24} className="mr-2" /> {selectedAdventure.toneStyle}
+        <p>
+          <PixelatedEmoji emoji="🎭" size={24} /><span className="pix-header text-lg">Narrator</span><br /> {selectedAdventure.narratorPersonality}
+        </p>
+        <p>
+          <PixelatedEmoji emoji="🎨" size={24} /> <span className="pix-header text-lg">Tone</span><br /> {selectedAdventure.toneStyle}
+        </p>
+        <p>
+          <PixelatedEmoji emoji="🎬" size={24} /> <span className="pix-header text-lg">Genres</span><br /> {selectedAdventure.genre.join(', ')}
+        </p>
+        <p>
+          <PixelatedEmoji emoji="🎯" size={24} /> <span className="pix-header text-lg">Difficulty</span><br /> {selectedAdventure.difficulty}
+        </p>
+        <p>
+          <PixelatedEmoji emoji="💡" size={24} /> <span className="pix-header text-lg">Themes</span><br /> {selectedAdventure.suggestedThemes.join(', ')}.
         </p>
 
 
         {/* Protagonist Carousel */}
-        <div className="mt-6">
-          <h2 className="text-center text-xl font-semibold mb-2">Select Your Protagonist</h2>
-          <div className="flex items-center justify-center">
-            <Button onClick={handlePrev}>
-              &lt;
-            </Button>
-            <div className="mx-4 p-4 border bg-zinc-950 space-y-2 text">
-                <h3 className="flex items-center gap-2 text-center text-xl font-semibold items-center justify-center"><PixelatedEmoji emoji={currentProtagonist.emoji} /> {currentProtagonist.name}</h3>
-              <p><PixelatedEmoji emoji="📜" size={24} /> {currentProtagonist.description}</p>
-              <p><PixelatedEmoji emoji="🔮" size={24} /> {currentProtagonist.backstory}</p>
-              <div className="mt-2 text-sm">
-                <p><PixelatedEmoji emoji="💪" size={24} /> {currentProtagonist.abilities.join(", ")}</p>
-                <p><PixelatedEmoji emoji="💔" size={24} /> {currentProtagonist.flaws.join(", ")}</p>
+
+        <Card className="bg-slate-950">
+          <CardHeader>
+            <CardTitle className="pix-header">
+              <div className="flex justify-between">
+                <Button onClick={handlePrev} size="sm">&lt;</Button>
+                <span className="text-xl">{currentProtagonist.name}</span>
+                <Button onClick={handleNext} size="sm">&gt;</Button>
               </div>
-            </div>
-            <Button onClick={handleNext}>
-              &gt;
-            </Button>
-          </div>
-        </div>
-        <div className="bg-zinc-950 p-4 border text-center">
-          <p className="italic">{selectedAdventure.initialStoryPrompt}</p>
-        </div>
+
+            </CardTitle>
+            <CardDescription className="flex justify-center items-center">
+              <PixelatedEmoji emoji={currentProtagonist.emoji} size={48} className="mr-3" />
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="pb-2"><PixelatedEmoji emoji="📜" size={24} /> <span className="pix-header text-lg">Description</span><br /> {currentProtagonist.description}</p>
+            <p className="pb-2"><PixelatedEmoji emoji="🔮" size={24} /> <span className="pix-header text-lg">Backstory</span><br /> {currentProtagonist.backstory}</p>
+            <p className="pb-2"><PixelatedEmoji emoji="💪" size={24} /> <span className="pix-header text-lg">Abilities</span><br /> {currentProtagonist.abilities.join(", ")}</p>
+            <p className="pb-2"><PixelatedEmoji emoji="💔" size={24} /> <span className="pix-header text-lg">Flaws</span><br /> {currentProtagonist.flaws.join(", ")}</p>
+          </CardContent>
+        </Card>
       </CardContent>
-      <CardFooter className="flex justify-between mt-2 pt-2">
-        <Link href="/adventure/select">
-          <Button>Go Back</Button>
+      <CardFooter className="flex flex-col sm:flex-row flex-1 justify-between gap-4">
+        <Link href="/adventure/select" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">Go Back</Button>
         </Link>
-        <Link href="/adventure/play">
-          <Button onClick={() => setSelectedProtagonist(currentProtagonist)}>
-            Begin with {currentProtagonist.name}
+        <Link href="/adventure/play" className="w-full sm:w-auto">
+          <Button 
+            onClick={() => setSelectedProtagonist(currentProtagonist)}
+            className="w-full sm:w-auto"
+          >
+            Begin as {currentProtagonist.name}
           </Button>
         </Link>
       </CardFooter>

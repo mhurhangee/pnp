@@ -10,6 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         red: "bg-red-600 hover:bg-red-700 border-2 shadow ring ring-4 ring-inset ring-red-800 hover:ring-0 hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px] transition-all duration-300 ease-in-out uppercase text-xl animate-blink",
+        purple: "bg-purple-600 hover:bg-purple-700 border-2 shadow ring ring-4 ring-inset ring-purple-800 hover:ring-0 hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px] transition-all duration-300 ease-in-out uppercase text-xl",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -20,7 +21,7 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "red",
-      size: "default",
+      size: "sm",
     },
   }
 )

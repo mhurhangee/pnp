@@ -16,7 +16,9 @@ import { item } from "@/lib/animation"
 import { useAdventure } from "@/components/adventure/context"
 import { ADVENTURES } from "@/components/adventure/adventures"
 import Link from "next/link"
+import { EmojiRow } from "../design/emoji-row"
 import { PixelatedEmoji } from "../design/pixelated-emoji"
+import { cn } from "@/lib/utils"
 
 export function AdventureBrowser() {
   const { setSelectedAdventure } = useAdventure()
@@ -79,14 +81,13 @@ export function AdventureBrowser() {
   const hiddenFiltersCount = activeFilters.length - visibleFiltersCount
 
   return (
-    <Card className="mx-auto max-w-3xl w-full bg-slate-950 my-8">
-      <CardHeader className="pb-2">
-        <CardTitle>
-          <PixelatedEmoji emoji="🗺️" className="pr-2" />
+    <Card className="card-main" variant="corners">
+      <CardHeader>
+        <CardTitle className="pix-header">
           Adventures
-          <PixelatedEmoji emoji="🏕️" className="pl-2" />
+          <EmojiRow emojis={["🗺️", "🏕️", "⚔️", "🧙‍♂️", "🐉"]} />
         </CardTitle>
-        <CardDescription className="text-center text-lg">Choose an adventure to begin your journey.</CardDescription>
+        <CardDescription className="cent-text">Choose an adventure to begin your journey.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -175,7 +176,7 @@ export function AdventureBrowser() {
               <>
                 {/* Show first few filters */}
                 {activeFilters.slice(0, visibleFiltersCount).map((filter, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
+                  <Badge key={index} className="text-xs">
                     {filter}
                     <button
                       className="ml-1 hover:text-primary"
@@ -210,7 +211,7 @@ export function AdventureBrowser() {
                         </div>
                         <div className="flex flex-wrap gap-1 max-h-32 overflow-y-auto">
                           {activeFilters.map((filter, index) => (
-                            <Badge key={index} variant="secondary" className="text-md">
+                            <Badge key={index} className="text-md">
                               {filter}
                               <button
                                 className="ml-1 hover:text-primary"
@@ -243,29 +244,20 @@ export function AdventureBrowser() {
             )}
           </div>
 
-          <ScrollArea className="h-[400px] p-4 border-2 border-dotted bg-violet-950" type="always">
             <div className="grid grid-cols-1 gap-4">
               {filteredAdventures.length > 0 ? (
                 filteredAdventures.map((adventure) => (
                   <motion.div key={adventure.id} variants={item}>
-                    <Card className="h-full flex flex-col">
+                    <Card className={cn(`${adventure.color}`)}>
                       <CardHeader>
-                        <CardTitle className="text-xl">
+                        <CardTitle className="pix-header">
                           <PixelatedEmoji emoji={adventure.emoji} className="pr-2" />
                           {adventure.title}
                           <span className="hidden lg:inline-block"><PixelatedEmoji emoji={adventure.emoji} className="pl-2" /></span>
                         </CardTitle>
-                        <CardDescription className="text-md">{adventure.setting}</CardDescription>
                       </CardHeader>
                       <CardContent className="flex-grow">
-                        <p className="text-md text-muted-foreground">{adventure.description}</p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {adventure.genre.map((genre) => (
-                            <Badge key={genre} variant="secondary" className="text-md">
-                              {genre}
-                            </Badge>
-                          ))}
-                        </div>
+                        <p>{adventure.description}</p>
                       </CardContent>
                       <CardFooter className="pt-0">
                         <div className="flex w-full items-center justify-between">
@@ -286,7 +278,6 @@ export function AdventureBrowser() {
                 </div>
               )}
             </div>
-          </ScrollArea>
         </div>
       </CardContent>
     </Card>
