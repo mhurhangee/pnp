@@ -6,6 +6,7 @@ import { Adventure } from './adventures';
 import { Protagonist } from './protagonists';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { EnhancedStrippedDice } from '@/components/design/dice';
 
 export function Play({
     selectedAdventure,
@@ -15,20 +16,28 @@ export function Play({
     selectedProtagonist: Protagonist;
 }) {
     const [isLoading, setIsLoading] = useState(false);
-    const [gameHistory, setGameHistory] = useState<(string | { narrative: string; selectedOption: string })[]>([]);
+    const [gameHistory, setGameHistory] = useState<{ role: "narrator" | "player", message: string }[]>([
+        { role: "narrator", message: selectedAdventure.initialStoryPrompt }
+    ]);
 
     // UI state
-    const [displayMode, setDisplayMode] = useState<'narrative' | 'options'>('narrative');
+    const [displayMode, setDisplayMode] = useState<'narrative' | 'options' | 'updatedAction'>('narrative');
     const [currentNarrative, setCurrentNarrative] = useState(selectedAdventure.initialStoryPrompt);
     const [currentOptions, setCurrentOptions] = useState(selectedAdventure.initialOptions);
+    const [currentOutcome, setCurrentOutcome] = useState('');
+    const [diceRolling, setDiceRolling] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
 
-    const handleOptionClick = (option: string) => {
-        // Start loading state
+
+    const handleOptionSelect = (option: string) => {
         setIsLoading(true);
+        setDiceRolling(true);
+        setSelectedOption(option);
+    }
 
-        // Create the updated history
-        const updatedHistory = [...gameHistory, { narrative: currentNarrative, selectedOption: option }];
-        setGameHistory(updatedHistory);
+    const handleDiceRoll = (result: number) => {
+        
+        const updatedDiceResult = result 
 
         // Make API call
         fetch('/api/play', {
@@ -37,19 +46,30 @@ export function Play({
             body: JSON.stringify({
                 adventure: selectedAdventure,
                 protagonist: selectedProtagonist,
-                gameHistory: updatedHistory,
+                gameHistory: gameHistory,
+                diceResult: updatedDiceResult,
+                currentNarrative: currentNarrative,
+                selectedOption: selectedOption
             }),
         })
             .then((response) => response.json())
             .then((data) => {
+                setCurrentOutcome(data.adjustedAction);
                 setCurrentNarrative(data.narrative);
                 setCurrentOptions(data.options);
-                setIsLoading(false);
-                setDisplayMode('narrative');
+                setGameHistory([...gameHistory, { role: "player", message: data.adjustedAction }, { role: "narrator", message: data.narrative }]);
+                setSelectedOption('');
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setDiceRolling(false);
+                    setDisplayMode('updatedAction');
+                }, 2000);
             })
             .catch((err) => {
                 console.error(err);
+                setSelectedOption('');
                 setIsLoading(false);
+                setDiceRolling(false);
                 setDisplayMode('narrative');
             });
     };
@@ -67,7 +87,9 @@ export function Play({
             <div className="flex-grow flex flex-col justify-center">
                 {/* Loading Indicator */}
                 <AnimatePresence mode="wait">
-                    {isLoading ? (
+                    {isLoading || diceRolling ? (
+
+
                         <motion.div
                             key="loading"
                             initial={{ opacity: 0 }}
@@ -75,9 +97,41 @@ export function Play({
                             exit={{ opacity: 0 }}
                             className="flex flex-col items-center justify-center py-12"
                         >
-                            <p className="text-lg">
-                                <span className="animate-pulse">{selectedProtagonist.name} is thinking</span> <span className="bounce"> ...</span>
-                            </p>
+
+                            <EnhancedStrippedDice
+                                onRollComplete={(result) => {
+                                    handleDiceRoll(result);
+                                }}
+                                autoHide={false}
+                            />
+                        </motion.div>
+                    ) : displayMode === 'updatedAction' ? (
+                        <motion.div
+                            key="updatedAction"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.5 }}
+                            className={cn("p-6 border-2 mb-6 relative", `${selectedAdventure.color}`)}
+                        >
+                            <motion.div className="absolute top-0 left-0 w-4 h-4 bg-white"></motion.div>
+                            <motion.div className="absolute top-0 right-0 w-4 h-4 bg-white"></motion.div>
+                            <motion.div className="absolute bottom-0 left-0 w-4 h-4 bg-white"></motion.div>
+                            <motion.div className="absolute bottom-0 right-0 w-4 h-4 bg-white"></motion.div>
+                            <p className="mb-8">{currentOutcome}</p>
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3, duration: 0.3 }}
+                            >
+                                <Button
+                                    onClick={() => setDisplayMode('narrative')}
+                                    className="mx-auto flex items-center"
+                                    size="sm"
+                                >
+                                    ▼ Continue ▼
+                                </Button>
+                            </motion.div>
                         </motion.div>
                     ) : displayMode === 'narrative' ? (
                         <motion.div
@@ -92,6 +146,8 @@ export function Play({
                             <motion.div className="absolute top-0 right-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 left-0 w-4 h-4 bg-white"></motion.div>
                             <motion.div className="absolute bottom-0 right-0 w-4 h-4 bg-white"></motion.div>
+
+
                             <p className="mb-8">{currentNarrative}</p>
 
                             <motion.div
@@ -137,7 +193,7 @@ export function Play({
                                         <span className="mr-2">
                                             <Button
                                                 key={index}
-                                                onClick={() => handleOptionClick(currentOptions[index])}
+                                                onClick={() => handleOptionSelect(currentOptions[index])}
                                                 disabled={isLoading}
                                                 size="sm"
                                             >

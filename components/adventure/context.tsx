@@ -12,6 +12,8 @@ type AdventureContextType = {
   setSelectedProtagonist: (protagonist: Protagonist | null) => void;
   gameState: GameState | null;
   setGameState: (gameState: GameState | null) => void;
+  gameHistory: (string | { narrative: string; selectedOption: string })[];
+  setGameHistory: (gameHistory: (string | { narrative: string; selectedOption: string })[]) => void;
 };
 
 const AdventureContext = createContext<AdventureContextType | undefined>(undefined);
@@ -20,9 +22,10 @@ export function AdventureProvider({ children }: { children: ReactNode }) {
   const [selectedAdventure, setSelectedAdventure] = useState<Adventure | null>(null);
   const [selectedProtagonist, setSelectedProtagonist] = useState<Protagonist | null>(null);
   const [ gameState, setGameState ] = useState<GameState | null>(null);
+  const [ gameHistory, setGameHistory ] = useState<(string | { narrative: string; selectedOption: string })[]>([]);
 
   return (
-    <AdventureContext.Provider value={{ selectedAdventure, setSelectedAdventure, selectedProtagonist, setSelectedProtagonist, gameState, setGameState }}>
+    <AdventureContext.Provider value={{ selectedAdventure, setSelectedAdventure, selectedProtagonist, setSelectedProtagonist, gameState, setGameState, gameHistory, setGameHistory }}>
       {children}
     </AdventureContext.Provider>
   );
